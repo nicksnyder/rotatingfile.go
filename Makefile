@@ -1,6 +1,6 @@
 include $(GOROOT)/src/Make.inc
 
-GOFMT=gofmt
+GOFMT=gofmt -s
 TARG=rotatingfile
 GOFILES=\
 	file.go\

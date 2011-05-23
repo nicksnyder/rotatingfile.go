@@ -22,21 +22,21 @@ type filenameTest struct {
 }
 
 var timeTests = []timeTest{
-	timeTest{0, 0},
-	timeTest{1, 0},
-	timeTest{9, 0},
-	timeTest{10, 10},
-	timeTest{11, 10},
-	timeTest{99, 90},
+	{0, 0},
+	{1, 0},
+	{9, 0},
+	{10, 10},
+	{11, 10},
+	{99, 90},
 }
 
 var filenameTests = []filenameTest{
-	filenameTest{0, "0.log"},
-	filenameTest{1, "0.log"},
-	filenameTest{9, "0.log"},
-	filenameTest{10, "10.log"},
-	filenameTest{11, "10.log"},
-	filenameTest{99, "90.log"},
+	{0, "0.log"},
+	{1, "0.log"},
+	{9, "0.log"},
+	{10, "10.log"},
+	{11, "10.log"},
+	{99, "90.log"},
 }
 
 func getTempDir(t *testing.T) (dir string) {
