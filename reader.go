@@ -4,15 +4,19 @@ import (
 	"os"
 )
 
+// A Reader reads from a RotatingFile.
 type Reader struct {
 	RotatingFile
-	begin, end, seekTime, seekOffset int64
+	beginTime, endTime, seekTime, seekOffset int64
 }
 
-func NewReader(secondsPerFile int, format string, begin, end int64) *Reader {
-	return &Reader{RotatingFile{secondsPerFile, format}, begin, end, begin, 0}
+// NewReader returns a new Reader that reads from a RotatingFile from beginTime to endTime.
+func NewReader(secondsPerFile int, format string, beginTime, endTime int64) *Reader {
+	return &Reader{RotatingFile{secondsPerFile, format}, beginTime, endTime, beginTime, 0}
 }
 
+// SeekToTime sets the offset for the next Read relative to the beginning of the File that corresponds to time.
+// It returns the new time and offset, or an Error if one occured.
 func (r *Reader) SeekToTime(time, offset int64) (normalizedTime, normalizedOffset int64, err os.Error) {
 	r.seekTime, r.seekOffset, err = r.normalize(time, offset)
 	return r.seekTime, r.seekOffset, err
@@ -26,14 +30,14 @@ func (r *Reader) normalize(time, offset int64) (newTime, newOffset int64, err os
 		dir = -1
 	}
 
-	for i := int64(0); true; i += dir {
-		newTime = r.time(time, i)
-		if newTime < r.begin || newTime > r.end {
+	for newTime = time; true; newTime += int64(r.secondsPerFile)*dir {
+		newTime = r.time(newTime)
+		if newTime < r.beginTime || newTime > r.endTime {
 			// Tried to seek past end of file
 			return newTime, newOffset, os.EOF
 		}
 
-		filename := r.filename(time, i)
+		filename := r.Filename(newTime)
 		info, err := os.Lstat(filename)
 		if err != nil {
 			// File doesn't exist, skip it
@@ -62,14 +66,16 @@ func (r *Reader) normalize(time, offset int64) (newTime, newOffset int64, err os
 	return newTime, newOffset, nil
 }
 
+// Read reads up to len(b) bytes from the RotatingFile. It returns the number of bytes read and an Error, if any.
+// EOF is signaled by a zero count with err set to EOF.
 func (r *Reader) Read(b []byte) (n int, err os.Error) {
-	for ; len(b) > 0; r.seekTime = r.time(r.seekTime, 1) {
-		if r.seekTime > r.end {
+	for ; len(b) > 0; r.seekTime += int64(r.secondsPerFile) {
+		if r.seekTime > r.endTime {
 			// Tried to read past end of file
 			return n, os.EOF
 		}
 
-		filename := r.filename(r.seekTime, 0)
+		filename := r.Filename(r.seekTime)
 		file, err := os.Open(filename)
 		if err != nil {
 			// File doesn't exist, skip it
@@ -91,19 +97,21 @@ func (r *Reader) Read(b []byte) (n int, err os.Error) {
 	return
 }
 
+// ReadAt reads up to len(b) bytes from the RotatingFile starting at the offset of the File that corresponds to time.
+// It returns the number of bytes read and an Error, if any. EOF is signaled by a zero count with err set to EOF.
 func (r *Reader) ReadAt(b []byte, time, offset int64) (n int, err os.Error) {
 	time, offset, err = r.normalize(time, offset)
 	if err != nil {
 		return
 	}
 
-	for ; len(b) > 0; time = r.time(time, 1) {
-		if time > r.end {
+	for ; len(b) > 0; time += int64(r.secondsPerFile) {
+		if time > r.endTime {
 			// Tried to read past end of file
 			return n, os.EOF
 		}
 
-		filename := r.filename(time, 0)
+		filename := r.Filename(time)
 		file, err := os.Open(filename)
 		if err != nil {
 			// File doesn't exist, skip it

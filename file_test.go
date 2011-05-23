@@ -13,36 +13,30 @@ var (
 )
 
 type timeTest struct {
-	time, index, newTime int64
+	time, newTime int64
 }
 
 type filenameTest struct {
-	time, index int64
+	time int64
 	filename string
 }
 
 var timeTests = []timeTest{
-	timeTest{0, 0, 0},
-	timeTest{0, 1, 10},
-	timeTest{0, 2, 20},
-	timeTest{5, 0, 0},
-	timeTest{5, 1, 10},
-	timeTest{5, 2, 20},
-	timeTest{10, 0, 10},
-	timeTest{10, 1, 20},
-	timeTest{10, 2, 30},
-	timeTest{50, 0, 50},
-	timeTest{50, 1, 60},
-	timeTest{50, 2, 70},
+	timeTest{0, 0},
+	timeTest{1, 0},
+	timeTest{9, 0},
+	timeTest{10, 10},
+	timeTest{11, 10},
+	timeTest{99, 90},
 }
 
 var filenameTests = []filenameTest{
-	filenameTest{0, 0, "0.log"},
-	filenameTest{0, 1, "10.log"},
-	filenameTest{0, 2, "20.log"},
-	filenameTest{5, 0, "0.log"},
-	filenameTest{5, 1, "10.log"},
-	filenameTest{5, 2, "20.log"},
+	filenameTest{0, "0.log"},
+	filenameTest{1, "0.log"},
+	filenameTest{9, "0.log"},
+	filenameTest{10, "10.log"},
+	filenameTest{11, "10.log"},
+	filenameTest{99, "90.log"},
 }
 
 func getTempDir(t *testing.T) (dir string) {
@@ -60,9 +54,9 @@ func getFormat(dir string) string {
 func TestTime(t *testing.T) {
 	rf := &RotatingFile{secondsPerFile, format}
 	for _, tt := range timeTests {
-		newTime := rf.time(tt.time, tt.index)
+		newTime := rf.time(tt.time)
 		if newTime != tt.newTime {
-			t.Errorf("time(%d, %d) = %d, expected %d", tt.time, tt.index, newTime, tt.newTime)
+			t.Errorf("time(%d) = %d, expected %d", tt.time, newTime, tt.newTime)
 		}
 	}
 }
@@ -70,9 +64,9 @@ func TestTime(t *testing.T) {
 func TestFilename(t *testing.T) {
 	rf := &RotatingFile{secondsPerFile, format}
 	for _, ft := range filenameTests {
-		filename := rf.filename(ft.time, ft.index)
+		filename := rf.Filename(ft.time)
 		if filename != ft.filename {
-			t.Errorf("filename(%d, %d) = %s, expected %s", ft.time, ft.index, filename, ft.filename)
+			t.Errorf("filename(%d) = %s, expected %s", ft.time, filename, ft.filename)
 		}
 	}
 }
