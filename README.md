@@ -42,7 +42,8 @@ An example is included in example.go.
 	}
 
 You can run the example with the following command (assuming a 6g compiler).
-6g example.go && 6l example.6 && time ./6.out && rm example.*.log;
+
+	6g example.go && 6l example.6 && time ./6.out && rm example.*.log;
 
 ## About
 
