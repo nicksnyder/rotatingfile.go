@@ -1,4 +1,5 @@
-// 6g example.go; 6l example.6; time ./6.out; rm example.*.log;
+// You can run the example with this command (assuming 6g compiler): 
+// 6g example.go && 6l example.6 && time ./6.out && rm example.*.log;
 package main
 
 import (
