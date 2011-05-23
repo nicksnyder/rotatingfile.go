@@ -2,11 +2,11 @@
 
 rotatingfile.go is a simple Go library for reading and writing rotating log files.
 
-# Installation
+## Installation
 
-`goinstall github.com/nicksnyder/rotatingfile.go`
+	goinstall github.com/nicksnyder/rotatingfile.go
 
-# Example
+## Example
 
 An example is included in example.go.
 
@@ -43,3 +43,9 @@ An example is included in example.go.
 
 You can run the example with this command (assuming 6g compiler):
 	6g example.go && 6l example.6 && time ./6.out && rm example.*.log;
+
+## About
+
+rotatingfile.go was written by Nick Snyder.
+
+Send me a message on [Twitter](http://twitter.com/nickdsnyder) if you have any suggestions or comments.
