@@ -12,7 +12,7 @@ type RotatingFile struct {
 }
 
 func (rf *RotatingFile) time(time, index int64) int64 {
-	return time - time%int64(rf.secondsPerFile) + index*int64(secondsPerFile)
+	return time - time%int64(rf.secondsPerFile) + index*int64(rf.secondsPerFile)
 }
 
 func (rf *RotatingFile) filename(time, index int64) string {
