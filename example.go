@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	secondsPerFile = 2
-	format = "example.%v.log"
+	secondsPerFile       = 2
+	format               = "example.%v.log"
 	nanosecondsPerSecond = 1000000000
 )
 
@@ -17,7 +17,7 @@ func main() {
 	beginTime := time.Seconds()
 	w := rotatingfile.NewWriter(secondsPerFile, format)
 	w.WriteString("hello\n")
-	time.Sleep(secondsPerFile*nanosecondsPerSecond)
+	time.Sleep(secondsPerFile * nanosecondsPerSecond)
 	w.WriteString("world\n")
 	endTime := time.Seconds()
 

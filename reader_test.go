@@ -8,20 +8,20 @@ import (
 )
 
 var (
-	begin int64 = 0
-	end int64 = 100
-	r *Reader = nil
+	begin int64   = 0
+	end   int64   = 100
+	r     *Reader = nil
 )
 
 type seekToTimeTest struct {
 	time, offset, newTime, newOffset int64
-	err os.Error
+	err                              os.Error
 }
 
 type readTest struct {
 	time, offset int64
-	buf []byte
-	err os.Error
+	buf          []byte
+	err          os.Error
 }
 
 var seekToTimeTests = []seekToTimeTest{

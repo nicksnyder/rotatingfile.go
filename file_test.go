@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	format = "%d.log"
+	format         = "%d.log"
 	seconds        = 100
 	secondsPerFile = 10
 )
@@ -17,7 +17,7 @@ type timeTest struct {
 }
 
 type filenameTest struct {
-	time int64
+	time     int64
 	filename string
 }
 

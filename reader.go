@@ -30,7 +30,7 @@ func (r *Reader) normalize(time, offset int64) (newTime, newOffset int64, err os
 		dir = -1
 	}
 
-	for newTime = time; true; newTime += int64(r.secondsPerFile)*dir {
+	for newTime = time; true; newTime += int64(r.secondsPerFile) * dir {
 		newTime = r.time(newTime)
 		if newTime < r.beginTime || newTime > r.endTime {
 			// Tried to seek past end of file
